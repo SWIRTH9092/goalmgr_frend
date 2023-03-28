@@ -6,7 +6,7 @@
             <img src="https://i.imgur.com/P9U0I0c.jpg" alt="arrows hitting target" >
         </div>
         <h2>Please Sign or Login</h2>
-        <!-- <router-link :to="{ name: 'LoginForm'}"><button>Login</button></router-link>        -->
+        <router-link :to="{ name: 'LoginView'}"><button>Login</button></router-link>       
     </div>
   </div>
 </template>
