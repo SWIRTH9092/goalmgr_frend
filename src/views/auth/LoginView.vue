@@ -38,7 +38,7 @@
 // 
 
 import AuthNavBar from "@/composables/auth/AuthNavBar.vue";
-// import router from "@/router";
+import router from "@/router";
 import axios from "axios";
 export default {
     name: "LoginView",
@@ -76,20 +76,18 @@ export default {
                         u_Password: this.u_Password
                     })
                         .then((response) => {
-                        console.log(response);
-                        this.isLoggedIn = true;
-                        localStorage.setItem("isLoggedIn", "true");
-                        this.u_RootKey = response.data.u_RootKey;
-                        localStorage.setItem("u_RootKey", this.u_RootKey);
-                        console.log(localStorage.getItem("u_RootKey"))
-                        
-                        // router.push({ name: "GoalIndexView" });
+                            console.log(response);
+                            this.isLoggedIn = true;
+                            localStorage.setItem("isLoggedIn", "true");
+                            this.u_RootKey = response.data.u_RootKey;
+                            localStorage.setItem("u_RootKey", this.u_RootKey);                  
+                            router.push({ name: "GoalView" });
                     })
                         .catch((error) => {
-                        console.log(error);
-                        this.isLoggedIn = false;
-                        localStorage.setItem("isLoggedIn", "false");
-                        this.loginError = "login Unsuccessful";
+                            console.log(error);
+                            this.isLoggedIn = false;
+                            localStorage.setItem("isLoggedIn", "false");
+                            this.loginError = "login Unsuccessful";
                     });
                 }
             }

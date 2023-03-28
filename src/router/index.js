@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/auth/LoginView.vue'
 import SignUpView from '../views/auth/SignUpView.vue'
+import GoalView from '../views/goal/GoalView.vue'
 
 const routes = [
   {
@@ -13,14 +14,17 @@ const routes = [
     path: '/login',
     name: 'LoginView',
     component: LoginView
-
   },
   {
     path: '/signup',
     name: 'SignUpView',
     component: SignUpView
-
-  }
+  },
+  {
+    path: '/goal',
+    name: 'GoalView',
+    component: GoalView  
+  },
 ]
 
     // route level code-splitting
