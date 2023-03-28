@@ -47,6 +47,7 @@ export default {
             isLoggedIn: false,
             u_Userid: "",
             u_Password: "",
+            u_RootKey: "",
             useridError: "",
             passwordError: "",
             loginError: ""
@@ -78,6 +79,10 @@ export default {
                         console.log(response);
                         this.isLoggedIn = true;
                         localStorage.setItem("isLoggedIn", "true");
+                        this.u_RootKey = response.data.u_RootKey;
+                        localStorage.setItem("u_RootKey", this.u_RootKey);
+                        console.log(localStorage.getItem("u_RootKey"))
+                        
                         // router.push({ name: "GoalIndexView" });
                     })
                         .catch((error) => {
