@@ -66,6 +66,7 @@
 
 import AuthNavBar from "../../composables/auth/AuthNavBar.vue"
 import axios from "axios";
+import router from "@/router";
 
 export default {
     data() {
@@ -108,6 +109,8 @@ export default {
                         .post(url, this.createUserid)
                         .then((response) => {
                         console.log(response);
+                        router.push({ name: "LoginView" });    
+
                     })
                         .catch((error) => {
                         console.log(error);
