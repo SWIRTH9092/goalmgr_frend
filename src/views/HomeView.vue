@@ -1,18 +1,40 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>
+        <h2>Dream Big!  Take your Vision and hit your Target!</h2>
+        <div class="imagecontainer">
+            <img src="https://i.imgur.com/P9U0I0c.jpg" alt="arrows hitting target" >
+        </div>
+        <h2>Please Sign or Login</h2>
+        <!-- <router-link :to="{ name: 'LoginForm'}"><button>Login</button></router-link>        -->
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
-  }
+
+  },
+
+data () {
+        return {
+            isLoggedIn: false,
+        }
+    },
 }
 </script>
+
+<style>
+
+    imagecontainer {
+        width: 350px;
+
+    }
+    img {
+        object-fit: contain;
+        border-radius: 15px;
+    }  
+</style>
