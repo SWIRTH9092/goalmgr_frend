@@ -56,7 +56,6 @@ export default {
     setup() {
     },
     mounted() {
-        console.log("local storage value", localStorage.getItem("isLoggedIn"));
     },
     methods: {
         async submitLogin(e) {
