@@ -1,0 +1,21 @@
+body {
+    margin: 0;
+  }
+  p {
+    font-style: italic;
+  }
+
+  :root {
+    --color1: #e3f2fd;
+    --color2: #bbdefb;
+    --color3: #90caf9;
+    --color4: #64b5f6;
+    --color5: #42a5f5;
+    --color6: #2196f3;
+    --color7: #1e88e5;
+    --color8: #1976d2;
+    --color9: #1565c0;
+    --color10: #0d47a1;
+    --titlefont: 'Bebas Neue', cursive;
+    --textfont: 'Source Sans Pro', sans-serif;
+  }
