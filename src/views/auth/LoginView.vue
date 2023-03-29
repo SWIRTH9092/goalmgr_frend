@@ -69,8 +69,9 @@ export default {
             // if no error
             if (!this.useridError) {
                 if (!this.passwordError) {
+                    const url = process.env.VUE_APP_ROOT_API + '/auth/login'
                     await axios
-                        .post("https://sw-goalmgr-bkend.onrender.com/auth/login", {
+                        .post(url, {
                         u_Userid: this.u_Userid,
                         u_Password: this.u_Password
                     })
