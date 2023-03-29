@@ -80,7 +80,7 @@ export default {
                             localStorage.setItem("isLoggedIn", "true");
                             this.u_RootKey = response.data.u_RootKey;
                             localStorage.setItem("u_RootKey", this.u_RootKey);                  
-                            router.push({ name: "GoalView" });
+                            router.push({ name: "GoalListView" });
                     })
                         .catch((error) => {
                             console.log(error);

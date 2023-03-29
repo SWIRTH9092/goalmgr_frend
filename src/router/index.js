@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/auth/LoginView.vue'
 import SignUpView from '../views/auth/SignUpView.vue'
-import GoalView from '../views/goal/GoalView.vue'
+import GoalListView from '../views/goallist/GoalListView.vue'
+
 
 const routes = [
   {
@@ -21,9 +22,9 @@ const routes = [
     component: SignUpView
   },
   {
-    path: '/goal',
-    name: 'GoalView',
-    component: GoalView  
+    path: '/goallist',
+    name: 'GoalListView',
+    component: GoalListView  
   },
 ]
 

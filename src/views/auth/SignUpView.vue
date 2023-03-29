@@ -102,18 +102,13 @@ export default {
             // print to console log signup info
             if(!this.useridError ) {
                 if(!this.passwordError) {
-                    console.log('createUserid', this.createUserid) 
                     const url = process.env.VUE_APP_ROOT_API + '/auth/signup'
-                    console.log(url)    
                     await axios
                         .post(url, this.createUserid)
-                        .then((response) => {
-                        console.log(response);
+                        .then(() => {
                         router.push({ name: "LoginView" });    
-
                     })
                         .catch((error) => {
-                        console.log(error);
                         this.loginError = `create Unsuccessful - ${error}`;
                     });
 
