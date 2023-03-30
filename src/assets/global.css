@@ -41,9 +41,12 @@ body {
   
   nav a {
     font-weight: bold;
-    color: #2c3e50;
+    padding: 10px;
+    color: var(--color12);
+    text-decoration: none;
+    font-size: 1rem;
   }
   
   nav a.router-link-exact-active {
-    color: #42b983;
+    color: #1A75E1;
   }
