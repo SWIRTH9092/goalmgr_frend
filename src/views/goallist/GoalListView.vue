@@ -41,6 +41,21 @@
         </form>
     </div>
 
+    <div class="goallist-container">
+    <ul>
+      <li v-for="(goallist, i) in goallists" :key="goallist._id">
+        <div class="goallist">
+        <span class="goallist-name">{{ goallist.gl_Name }}</span>
+        <span class="goallist-stat">{{ goallist.gl_Stat }}</span>
+        <span class="goallist-description">{{ goallist.gl_Description }}</span>
+        <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
+        <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
+      </div>
+        <button class="delete-btn" @click="removeGoal(goallist, i)">DELETE GOAL</button>
+      </li>
+    </ul>
+  </div>
+
 </template>
 <script>
 
@@ -53,6 +68,7 @@ export default {
             isLoggedIn: '',
             createError: '',
             currentDate: '',
+            goallists: [],
             createGoalList: {
                 gl_URootKey: '',
                 gl_Rootkey: '',
@@ -63,7 +79,6 @@ export default {
                 gl_EndDate: '',
                 gl_SortOrder: 99,
             },
-            goallist: []
          }
     },
   
@@ -100,12 +115,9 @@ export default {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/index/' +     this.u_RootKey
 
             await axios
-            .get(url)
-            .then((response) => {
-                this.goallist = response;
-                console.log(this.goallist)
-                console.log(response);
-            })
+                .get(url)
+                .then((response) => (
+                    this.goallists = response.data))
                 .catch((error) => {
                     this.loginError = `Getting Data Unsuccessful - ${error}`;
             });
@@ -124,17 +136,89 @@ export default {
             await axios
                 .post(url, this.createGoalList)
                 .then((response) => {
-                    console.log("created Goal", response)
-                    // router.push({ name: "GoalView" });
+                    // blank out create fields
+                    this.createGoalList.gl_URootKey = ''
+                    this.createGoalList.gl_Name = ''
+                    this.createGoalList.gl_Stat = ''
+                    this.createGoalList.gl_Description = ''
+                    this.createGoalList.gl_StartDate = this.currentDate
+                    this.createGoalList.gl_EndDate = this.currentDate
+                    // add the goal to the list
+                    this.goallists.push(response.data)
             })
                 .catch((error) => {
                     console.log(error);
                     this.createError = "create Goal Unsuccessful";
             });
-        }       
-    }
+        },
+        async removegoallist(item, i) {
+            const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'
+            await axios.delete(url+ item._id);
+            this.goallists.splice(i, 1);       
+        }  
+    } 
 }
 </script>
 <style>
-    
+
+.main {
+  margin: auto;
+  margin-top: 3rem;
+  max-width: 400px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+ h3{
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+}
+
+.submit-button {
+  width: 400px;
+  padding: 10px;
+  background-color: #1976d2;
+  color: white;
+  cursor: pointer;
+}
+
+.goallists-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.goalists-container ul {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+.goallists-container ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.goallist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  max-width: 250px;
+}
 </style>
