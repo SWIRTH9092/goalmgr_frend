@@ -86,6 +86,8 @@ export default {
         // get data from Local Storage
         this.u_RootKey = localStorage.getItem('u_RootKey')
         this.isLoggedIn = localStorage.getItem('isLoggedIn')
+        console.log("this U_RootKey", this.u_RootKey)
+        console.log("isLoggedIn", this.isLoggedIn)
 
         //get current date for 
         const currentDate = new Date();
