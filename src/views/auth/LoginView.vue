@@ -79,6 +79,8 @@ export default {
                             console.log(response);
                             this.isLoggedIn = true;
                             localStorage.setItem("isLoggedIn", "true");
+                            console.log("login response.data:", response.data)
+                            console.log("login response.data.u_Rootkey:", response.data.u_RootKey)
                             this.u_RootKey = response.data.u_RootKey;
                             localStorage.setItem("u_RootKey", this.u_RootKey);                  
                             router.push({ name: "GoalListView" });
