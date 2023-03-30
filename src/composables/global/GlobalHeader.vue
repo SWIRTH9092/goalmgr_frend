@@ -16,12 +16,12 @@ export default {
 <style>
 
     .headerbox {
-        background-color: var(--color3);
+        background-color: var(--color5);
         text-align: center; 
     }
 
     h1 {
         text-align:center;
-        color: var(--color10);
+        color: var(--color12)
     }   
 </style>

@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    background-color: var(--color3)
   }
   p {
     font-style: italic;
@@ -8,18 +9,19 @@ body {
   :root {
     --color1: #FFFFFF;
     --color2: #B3B3B3;
-    --color3: #C3E5FF;
-    --color4: #90caf9;
-    --color5: #297CAC;
-    --color6: #0780C8;
-    --color7: #1A75E1;
-    --color8: #2b45CC;
-    --color9: #4120AC;
-    --color10: #4120AD;
-    --color11: #241E20;
-    --color12: #F4C41B;
-    --color13: #B41801;
-    
+    --color3: #f4f8fb;
+    --color4: #dbeefc;
+    --color5: #90caf9;
+    --color6: #297CAC;
+    --color7: #0780C8;
+    --color8: #1A75E1;
+    --color9: #2b45CC;
+    --color10: #4120AC;
+    --color11: #4120AD;
+    --color12: #241E20;
+    --color13: #F4C41B;
+    --color14: #B41801;
+
 
     --titlefont: 'Bebas Neue', cursive;
     --textfont: 'Source Sans Pro', sans-serif;
