@@ -6,16 +6,21 @@ body {
   }
 
   :root {
-    --color1: #e3f2fd;
-    --color2: #bbdefb;
-    --color3: #90caf9;
-    --color4: #64b5f6;
-    --color5: #42a5f5;
-    --color6: #2196f3;
-    --color7: #1e88e5;
-    --color8: #1976d2;
-    --color9: #1565c0;
-    --color10: #0d47a1;
+    --color1: #FFFFFF;
+    --color2: #B3B3B3;
+    --color3: #C3E5FF;
+    --color4: #90caf9;
+    --color5: #297CAC;
+    --color6: #0780C8;
+    --color7: #1A75E1;
+    --color8: #2b45CC;
+    --color9: #4120AC;
+    --color10: #4120AD;
+    --color11: #241E20;
+    --color12: #F4C41B;
+    --color13: #B41801;
+    
+
     --titlefont: 'Bebas Neue', cursive;
     --textfont: 'Source Sans Pro', sans-serif;
   }
