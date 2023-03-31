@@ -1,59 +1,67 @@
 <template >
-    <GoallistNavBar/>
     <div>
-        <h1>Goal Setting</h1>
+        <GoallistNavBar/>
+        <div>
+            <div v-if="viewCreate">
+                <form @submit.prevent="handleCreateGoal">
 
-        <form @submit.prevent="handleCreateGoal">
+                    <label>Name:</label>
+                    <input type="text" 
+                        v-model="createGoalList.gl_Name" 
+                        placeholder="goal name" 
+                        required 
+                    >
 
-            <label>Name:</label>
-            <input type="text" 
-                v-model="createGoalList.gl_Name" 
-                placeholder="goal name" 
-                required 
-            >
+                    <label for="status">Choose a Status:</label>
+                        <select name="status" id="status" v-model="createGoalList.gl_Stat">
+                            <option value="Not Started">Not started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    <br>
 
-            <label for="status">Choose a Status:</label>
-                <select name="status" id="status" v-model="createGoalList.gl_Stat">
-                    <option value="Not Started">Not started</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                </select>
-            <br>
+                    <label>Description:</label>
+                    <input type="text" 
+                        v-model="createGoalList.gl_Description" 
+                        placeholder="description" 
+                        >
 
-            <label>Description:</label>
-            <input type="text" 
-                v-model="createGoalList.gl_Description" 
-                placeholder="description" 
-                >
+                    <label>Start Date:</label>        
+                    <input type="date" 
+                        v-model="createGoalList.gl_StartDate" 
+                    >
 
-            <label>Start Date:</label>        
-            <input type="date" 
-                v-model="createGoalList.gl_StartDate" 
-            >
-
-            <label>End Date:</label>        
-            <input type="date" 
-                v-model="createGoalList.gl_EndDate" 
-            >
-                
-            <div class="submit">
-                <button>Create Goal</button>
+                    <label>End Date:</label>        
+                    <input type="date" 
+                        v-model="createGoalList.gl_EndDate" 
+                    >
+                        
+                    <div class="submit">
+                        <button>Create Goal</button>
+                    </div>
+                </form>
+                <button @click="closeCreateForm">Close Create Goal</button>
             </div>
-        </form>
+            <div v-if="!viewCreate">
+                <button @click="openCreateForm">Create New Goal</button>            
+            </div>  
 
-        <div class="goallist-container">
-            <div v-for="(goallist, i) in goallists" :key="goallist._id">
-                <div class="goallist">
-                    <span class="goallist-name">{{ goallist.gl_Name }}</span>
-                    <span class="goallist-stat">{{ goallist.gl_Stat }}</span>
-                    <span class="goallist-description">{{ goallist.gl_Description }}</span>
-                    <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
-                    <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
+            <div class="goallist-container">
+                <div v-for="(goallist, i) in goallists" :key="goallist._id">
+                    <div class="goallist">
+                        <span class="goallist-name">{{ goallist.gl_Name }}</span>
+                        <span class="goallist-stat">{{ goallist.gl_Stat }}</span>
+                        <span class="goallist-description">{{ goallist.gl_Description }}</span>
+                        <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
+                        <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
+                    </div>
+                    <button class="delete-btn" @click="removegoallist(goallist, i)">DELETE GOAL</button>
+                </div>
             </div>
-            <button class="delete-btn" @click="removegoallist(goallist, i)">DELETE GOAL</button>
         </div>
     </div>
-  </div>
+ 
+
 
 </template>
 <script>
@@ -68,6 +76,7 @@ export default {
             isLoggedIn: '',
             createError: '',
             currentDate: '',
+            viewCreate: '',
             goallists: [],
             createGoalList: {
                 gl_URootKey: '',
@@ -158,7 +167,9 @@ export default {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'
             await axios.delete(url+ item._id);
             this.goallists.splice(i, 1);       
-        }  
+        },  
+        closeCreateForm() {this.viewCreate= ''},
+        openCreateForm() {this.viewCreate = true}
     } 
 }
 </script>
