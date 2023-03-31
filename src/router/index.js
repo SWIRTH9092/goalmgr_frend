@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/auth/LoginView.vue'
 import SignUpView from '../views/auth/SignUpView.vue'
 import GoalListView from '../views/goallist/GoalListView.vue'
-
+import GoalListUpdate from '../views/goallist/GoalListUpdate.vue'
 
 const routes = [
   {
@@ -25,6 +25,11 @@ const routes = [
     path: '/goallist',
     name: 'GoalListView',
     component: GoalListView  
+  },
+  {
+    path: '/goallistupdate',
+    name: 'GoalListUpdate',
+    component: GoalListUpdate 
   },
 ]
 

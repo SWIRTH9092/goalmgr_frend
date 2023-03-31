@@ -60,10 +60,10 @@
 
                             <br>
                             <div goal-button-container>
-                                <button class="goal-buttons">
-                                    Update</button>                            
                                 <button class="goal-buttons" 
-                                @click="removegoallist(goallist, i)">Delete</button>
+                                    @click="updategoallist(goallist)">Update</button>                            
+                                <button class="goal-buttons" 
+                                    @click="removegoallist(goallist, i)">Delete</button>
                             </div>
                             <br>
                         </div>
@@ -79,10 +79,11 @@
 </template>
 <script>
 
+import router from "@/router";
 import axios from "axios";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
 export default {
-    name: "GoalView",
+    name: "GoalListView",
     data() {
         return {
             u_RootKey: '',
@@ -93,7 +94,7 @@ export default {
             goallists: [],
             createGoalList: {
                 gl_URootKey: '',
-                gl_Rootkey: '',
+                gl_RootKey: '',
                 gl_Name: '',
                 gl_Stat: '',
                 gl_Description: '',
@@ -155,7 +156,6 @@ export default {
             //  update create record with the userid root key: u_rootkey 
             //     from local storage
             this.createGoalList.gl_URootKey = localStorage.getItem('u_RootKey')
-            console.log(this.createGoalList)
 
             const url = process.env.VUE_APP_ROOT_API + '/goallist/create'
             await axios
@@ -172,15 +172,18 @@ export default {
                     this.goallists.push(response.data)
             })
                 .catch((error) => {
-                    console.log(error);
-                    this.createError = "create Goal Unsuccessful";
+                    this.createError = error
             });
         },
         async removegoallist(item, i) {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'
             await axios.delete(url+ item._id);
             this.goallists.splice(i, 1);       
-        },  
+        }, 
+        async updategoallist(item) {
+            localStorage.setItem('updateGLData', JSON.stringify(item))
+            router.push( {name: "GoalListUpdate"} )  
+        },   
         closeCreateForm() {this.viewCreate= ''},
         openCreateForm() {this.viewCreate = true}
     } 
