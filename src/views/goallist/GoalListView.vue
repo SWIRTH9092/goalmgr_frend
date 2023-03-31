@@ -1,6 +1,6 @@
 <template >
     <div>
-        <h1>Goal List Page</h1>
+        <h1>Goal Setting</h1>
 
         <form @submit.prevent="handleCreateGoal">
 
@@ -42,18 +42,18 @@
     </div>
 
     <div class="goallist-container">
-    <ul>
-      <li v-for="(goallist, i) in goallists" :key="goallist._id">
-        <div class="goallist">
-        <span class="goallist-name">{{ goallist.gl_Name }}</span>
-        <span class="goallist-stat">{{ goallist.gl_Stat }}</span>
-        <span class="goallist-description">{{ goallist.gl_Description }}</span>
-        <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
-        <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
-      </div>
-        <button class="delete-btn" @click="removeGoal(goallist, i)">DELETE GOAL</button>
-      </li>
-    </ul>
+        <div>
+            <div v-for="(goallist, i) in goallists" :key="goallist._id">
+                <div class="goallist">
+                    <span class="goallist-name">{{ goallist.gl_Name }}</span>
+                    <span class="goallist-stat">{{ goallist.gl_Stat }}</span>
+                    <span class="goallist-description">{{ goallist.gl_Description }}</span>
+                    <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
+                    <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
+            </div>
+            <button class="delete-btn" @click="removeGoal(goallist, i)">DELETE GOAL</button>
+        </div>div>
+    </div>
   </div>
 
 </template>
@@ -194,7 +194,7 @@ export default {
   cursor: pointer;
 }
 
-.goallists-container {
+.goallist-container {
   display: flex;
   flex-direction: column;
   align-items: center;

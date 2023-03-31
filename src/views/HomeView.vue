@@ -45,7 +45,7 @@ data () {
 
     }
     img {
-        object-fit: contain;
+        width:350px;
         border-radius: 15px;
     } 
     
@@ -60,5 +60,11 @@ data () {
     }
     .pagecolor {
         color: var(--color8);
+    }
+
+    @media only screen and (max-width: 500px) {
+        imagecontainer {
+        width: 250px;
+        } 
     }
 </style>

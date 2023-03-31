@@ -21,6 +21,7 @@ body {
     --color12: #241E20;
     --color13: #F4C41B;
     --color14: #B41801;
+    --color15: #b5bad3;
 
 
     --titlefont: 'Bebas Neue', cursive;
@@ -49,4 +50,57 @@ body {
   
   nav a.router-link-exact-active {
     color: #1A75E1;
+  }
+
+  form {
+    border: var(--color11) solid 3px;
+    max-width: 380px;
+    margin: 30px auto;
+    background: var(--color1);
+    text-align: left;
+    padding: 40px;
+    border-radius: 10px;
+  }
+
+  form h2 {
+    color: var(--color8);
+    text-align: center;
+  }
+
+  form label {
+    color: var(--color12);
+    font-size: 1em;
+    display: inline-block;
+    margin: 25px 0 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  form input {
+    display: block;
+    font-size: 1.25em;
+    padding: 10px 6px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid var(--color12);
+    color: var(--color8);
+  } 
+
+  button {
+    background: var(--color11);
+    border: 0;
+    font-weight: 900;
+    font-size: 1.25em;
+    padding: 10px 20px;
+    margin-top: 20px;
+    color: var(--color1);
+    border-radius: 20px;
+  }
+  .error {
+    color: var(--color14);
+    margin-top: 10px;
+    font-size: 0.8em;
+    font-weight: bold;
   }
