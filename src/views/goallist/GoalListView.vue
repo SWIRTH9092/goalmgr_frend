@@ -45,17 +45,30 @@
             <div v-if="!viewCreate">
                 <button @click="openCreateForm">Create New Goal</button>            
             </div>  
+            <div>
+                <h2>Goals</h2>
+                <div class="goaldata-container">
+                    <div v-for="(goallist, i) in goallists" :key="goallist._id">
+                        <div class="goalitems">
+                            <div class="goalname">
+                                <p>Goal</p>
+                            </div>
+                            <p class="goallist-name">{{ goallist.gl_Name }}</p>
+                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>
+                            <span class="goal-data"> StartDate: {{ goallist.gl_StartDate }}</span>
+                            <span class="goal-data">EndDate: {{ goallist.gl_EndDate }}</span>                                
 
-            <div class="goallist-container">
-                <div v-for="(goallist, i) in goallists" :key="goallist._id">
-                    <div class="goallist">
-                        <span class="goallist-name">{{ goallist.gl_Name }}</span>
-                        <span class="goallist-stat">{{ goallist.gl_Stat }}</span>
-                        <span class="goallist-description">{{ goallist.gl_Description }}</span>
-                        <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
-                        <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
+                            <br>
+                            <div goal-button-container>
+                                <button class="goal-buttons">
+                                    Update</button>                            
+                                <button class="goal-buttons" 
+                                @click="removegoallist(goallist, i)">Delete</button>
+                            </div>
+                            <br>
+                        </div>
+
                     </div>
-                    <button class="delete-btn" @click="removegoallist(goallist, i)">DELETE GOAL</button>
                 </div>
             </div>
         </div>
@@ -175,64 +188,74 @@ export default {
 </script>
 <style>
 
-.main {
-  margin: auto;
-  margin-top: 3rem;
-  max-width: 400px;
+
+.goaldata-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min), max-content));
+  grid-gap: var(--grid-gap);
+  justify-content: center;
 }
 
-.form {
+.goalitems {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
- h3{
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.input {
-  width: 100%;
-  padding: 10px;
-}
-
-.submit-button {
-  width: 400px;
-  padding: 10px;
-  background-color: #1976d2;
-  color: white;
-  cursor: pointer;
-}
-
-.goallist-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.goalists-container ul {
-  width: 100%;
-  list-style: none;
-  padding: 0;
-}
-
-.goallists-container ul li {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.goallist {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   justify-content: flex-start;
+  width: 350px;
+
+ 
+
+  /* align-items: center;
+
   padding: 10px;
-  max-width: 250px;
+  max-width: 250px; */
+  border: var(--color11) solid 7px;
+  border-radius: 10px;
+  /* font-size: 1.5em; */
+
+
+}
+
+.goalname {
+   background-color: var(--color8);
+   color: white;
+   font-size: 1.25rem;
+   font-weight: 900;
+   font-style:normal;
+   border-bottom: var(--color11) solid 7px; 
+
+}
+
+.goal-button-container {
+    color: white;
+   font-size: 1.25rem;
+   font-weight: 900;
+   font-style:normal;
+   background-color: var(--color11) solid 7px;
+   margin: 0 15% 0 15%; 
+   border: var(--color3) solid 7px; 
+}
+
+.goal-buttons {
+    background-color: var(--color11);
+    border: 10px solid var(--color3);
+    font-weight: 900;
+    font-size: 1.25em;
+    padding: 10px 20px;
+    margin-top: 20px;
+    color: var(--color1);
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+.goallist-name {
+    font-size: 1.25rem;
+    font-weight: 900; 
+    color: black;
+    padding: 10px;
+}
+
+.goal-data {
+    font-size: 1.25rem;
+    color: black; 
 }
 </style>
