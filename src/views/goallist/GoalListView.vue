@@ -1,4 +1,5 @@
 <template >
+    <GoallistNavBar/>
     <div>
         <h1>Goal Setting</h1>
 
@@ -39,10 +40,8 @@
                 <button>Create Goal</button>
             </div>
         </form>
-    </div>
 
-    <div class="goallist-container">
-        <div>
+        <div class="goallist-container">
             <div v-for="(goallist, i) in goallists" :key="goallist._id">
                 <div class="goallist">
                     <span class="goallist-name">{{ goallist.gl_Name }}</span>
@@ -51,8 +50,8 @@
                     <span class="goallist-startdate">{{ goallist.gl_StartDate }}</span>
                     <span class="goallist-enddate">{{ goallist.gl_EndDate }}</span>
             </div>
-            <button class="delete-btn" @click="removeGoal(goallist, i)">DELETE GOAL</button>
-        </div>div>
+            <button class="delete-btn" @click="removegoallist(goallist, i)">DELETE GOAL</button>
+        </div>
     </div>
   </div>
 
@@ -60,6 +59,7 @@
 <script>
 
 import axios from "axios";
+import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
 export default {
     name: "GoalView",
     data() {
@@ -81,13 +81,14 @@ export default {
             },
          }
     },
+    components: {
+        GoallistNavBar
+    },
   
     async mounted() {
         // get data from Local Storage
         this.u_RootKey = localStorage.getItem('u_RootKey')
         this.isLoggedIn = localStorage.getItem('isLoggedIn')
-        console.log("this U_RootKey", this.u_RootKey)
-        console.log("isLoggedIn", this.isLoggedIn)
 
         //get current date for 
         const currentDate = new Date();

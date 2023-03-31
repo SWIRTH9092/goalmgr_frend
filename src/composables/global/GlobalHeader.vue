@@ -2,7 +2,7 @@
     <div>
         <div class="headerbox">
             <br>
-            <h1>Goal Manager</h1> 
+            <h1>Goal Settings Manager</h1> 
             <br>
         </div>
 

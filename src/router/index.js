@@ -8,7 +8,7 @@ import GoalListView from '../views/goallist/GoalListView.vue'
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView
   },
   {
