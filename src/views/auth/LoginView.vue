@@ -76,21 +76,16 @@ export default {
                         u_Password: this.u_Password
                     })
                         .then((response) => {
-                            console.log(response);
                             this.isLoggedIn = true;
                             localStorage.setItem("isLoggedIn", "true");
-                            console.log("response", response)
-                            console.log("login response.data:", response.data)
-                            console.log("login response.data.u_Rootkey:", response.data.u_RootKey)
                             this.u_RootKey = response.data.u_RootKey;
                             localStorage.setItem("u_RootKey", this.u_RootKey);                  
                             router.push({ name: "GoalListView" });
                     })
                         .catch((error) => {
-                            console.log(error);
                             this.isLoggedIn = false;
                             localStorage.setItem("isLoggedIn", "false");
-                            this.loginError = "login Unsuccessful";
+                            this.loginError = `create Unsuccessful - ${error}`;
                     });
                 }
             }
