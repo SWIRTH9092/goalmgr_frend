@@ -30,7 +30,23 @@ The purpose of this project is to manage goals set and the progress towards achi
 
 ##### Goal Manager Screen Shots
 
-- Screen shots of completed website
+- Website Home Page
+<img src="https://i.imgur.com/uWZheqU.jpg" alt="WebsiteHomePage " title="Home Page" width="50%"/>
+
+- Loginactivity Page
+<img src="https://i.imgur.com/K0KjWbj.jpg" alt="LoginPage " title="Login Page" width="50%"/>
+
+- Signup Page
+<img src="https://i.imgur.com/Q349cEg.jpg" alt="SignupPage " title="Signup Page" width="50%"/>
+
+- Main Goals Page
+<img src="https://i.imgur.com/RL9CVhr.jpg" alt="Goals Page " title="Goals Show, Create and Delete" width="50%"/>
+
+- Main Goals Page with Goal Create form Open
+<img src="https://i.imgur.com/oXWBW8Z.jpg" alt="Goals Page " title="Goals Show, Create and Delete" width="50%"/>
+
+- Main Goals Update Page
+<img src="https://i.imgur.com/4rf9Tlt.jpg" alt="Goals Page Update " title="Goals Update" width="50%"/>
 
 ##### Dependencies Used
 - Vue3
@@ -89,6 +105,7 @@ The purpose of this project is to manage goals set and the progress towards achi
 - asets/global.css - global css file 
 
 ##### -  Future feature Additions
+- Edit Dates so that start Date is not later than End Date
 - Goal Steps for a goal
 - Goal Tracking for a step
 - Feature on one webpage to be able to update tracking for incomplete steps
