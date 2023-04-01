@@ -1,7 +1,8 @@
 <template>
     <nav>
-      <router-link :to="{ name: 'GoalListView'}">Goal List View</router-link> 
-      <button @click="logout">Logout</button>
+      <router-link :to="{ name: 'GoalListView'}">
+        <button class="button-link">Goal List View</button></router-link> 
+      <button class="button-link" @click="logout">Logout</button>
 
       <!-- <router-link :to="{ name: 'home'}">Logout</router-link>  -->
 

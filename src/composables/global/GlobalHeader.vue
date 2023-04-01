@@ -18,6 +18,7 @@ export default {
     .headerbox {
         background-color: var(--color8);
         text-align: center; 
+        border-bottom: var(--color11) solid 7px;
     }
 
     h1 {

@@ -37,16 +37,21 @@
                     >
                         
                     <div class="submit">
-                        <button>Create Goal</button>
+                        <button class="button-normal">Create Goal</button>
                     </div>
                 </form>
-                <button @click="closeCreateForm">Close Create Goal</button>
+                <button class="button-normal"
+                @click="closeCreateForm">Close Create Goal</button>
             </div>
             <div v-if="!viewCreate">
-                <button @click="openCreateForm">Create New Goal</button>            
+                <button class="button-normal"
+                @click="openCreateForm">Create New Goal</button>            
             </div>  
             <div>
+                <br>
+                <br>
                 <h2>Goals</h2>
+                <br>
                 <div class="goaldata-container">
                     <div v-for="(goallist, i) in goallists" :key="goallist._id">
                         <div class="goalitems">
@@ -61,7 +66,7 @@
                             <br>
                             <div goal-button-container>
                                 <button class="goal-buttons" 
-                                    @click="updategoallist(goallist)">Update</button>                            
+                                    @click="updategoallist(goallist)" >Update</button>                            
                                 <button class="goal-buttons" 
                                     @click="removegoallist(goallist, i)">Delete</button>
                             </div>

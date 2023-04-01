@@ -39,7 +39,7 @@
                     >
                         
                     <div class="submit">
-                        <button>Update Goal</button>
+                        <button class="button-normal">Update Goal</button>
                     </div>
                 </form>
         </div>

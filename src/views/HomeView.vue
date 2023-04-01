@@ -1,22 +1,20 @@
 <template>
   <div class="home">
     <div>
-        <br>
-        <br>
-        <h2 class="pagecolor">Dream Big!  Take your Vision and hit your Target!</h2>
+        <h5 class="pagecolor">Dream Big!  Set Your Goals, Follow through and hit your Target!</h5>
         <br>
         <div class="imagecontainer">
             <img src="https://i.imgur.com/P9U0I0c.jpg" alt="arrows hitting target" >
         </div>
         <br>
-        <h2 class="pagecolor">Please Sign or Login</h2>
+        <h3 class="pagecolor">Please Sign or Login</h3>
         <router-link class="homelink" 
             :to="{ name: 'LoginView'}">
-            <button class="homebutton">Login</button>
+            <button class="button-normal">Login</button>
         </router-link>   
         <router-link  class="homelink" 
             :to="{ name: 'SignUpView'}">
-            <button class="homebutton">Signup</button>
+            <button class="button-normal">Signup</button>
         </router-link>       
     </div>
   </div>
@@ -40,9 +38,13 @@ data () {
 
 <style>
 
-    imagecontainer {
+    .imagecontainer {
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
         width: 350px;
-
+        text-align: center;
+    
     }
     img {
         width:350px;
@@ -60,11 +62,23 @@ data () {
     }
     .pagecolor {
         color: var(--color8);
+        font-size: 2.5rem;
+        font-weight: 900;
     }
 
     @media only screen and (max-width: 500px) {
-        imagecontainer {
-        width: 250px;
+    
+        .pagecolor {
+            padding: 0 10px 0 10px;
+            font-size: 1.1rem;
+        }
+
+        .imagecontainer {
+            width: 300px;
+  
+        }
+        img {
+            width:300px;
         } 
     }
 </style>

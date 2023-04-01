@@ -35,7 +35,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: black;
   }
   
   nav {
@@ -87,10 +87,26 @@ body {
     box-sizing: border-box;
     border: none;
     border-bottom: 1px solid var(--color12);
-    color: var(--color8);
+    color: Black;
   } 
 
-  button {
+  .button-link {
+    background-color: var(--color8);
+    border: 0;
+    font-weight: 900;
+    font-size: 1.25em;
+    padding: 10px 20px;
+    width: 15rem;
+    margin-top: 20px;
+    color: var(--color1);
+    border-radius: 20px;
+    border: 7px solid var(--color3);
+    cursor: pointer;
+  }
+
+
+
+  .button-normal {
     background-color: var(--color11);
     border: 0;
     font-weight: 900;

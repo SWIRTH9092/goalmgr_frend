@@ -28,7 +28,7 @@
         <div class="error" > {{ loginError }}</div>
 
         <div class="submit">
-            <button>Login</button>
+            <button class="button-normal">Login</button>
         </div>
     </form>
     </div>

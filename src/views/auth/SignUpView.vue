@@ -3,7 +3,7 @@
         <AuthNavBar />
         <form @submit.prevent="handleSubmit">
 
-            <h2 class="formtitle">Sign up </h2>
+            <h2 >Sign up </h2>
 
             <label>Userid:</label>
             <input type="text" 
@@ -57,7 +57,7 @@
                 >
 
             <div class="submit">
-                <button>Create Signon</button>
+                <button class="button-normal">Create Signon</button>
             </div>
         </form>
     </div>
