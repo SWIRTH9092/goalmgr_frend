@@ -85,7 +85,6 @@
 <script>
 
 import router from "@/router";
-import axios from "axios";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
 export default {
     name: "GoalListView",
@@ -145,10 +144,11 @@ export default {
                     //get data for list
             const url = process.env.VUE_APP_ROOT_API + '/goallist/index/' +     this.u_RootKey
 
-            await axios
-                .get(url)
-                .then((response) => (
-                    this.goallists = response.data))
+            await fetch (url)
+                .then(response => response.json())
+                .then(data => {
+                    this.goallists = data;
+                })
                 .catch((error) => {
                     this.loginError = `Getting Data Unsuccessful - ${error}`;
             });
@@ -163,9 +163,23 @@ export default {
             this.createGoalList.gl_URootKey = localStorage.getItem('u_RootKey')
 
             const url = process.env.VUE_APP_ROOT_API + '/goallist/create'
-            await axios
-                .post(url, this.createGoalList)
-                .then((response) => {
+            await fetch (url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                 },
+                 body: JSON.stringify({
+
+                    gl_URootKey: this.createGoalList.gl_URootKey,
+                    gl_Name: this.createGoalList.gl_Name,
+                    gl_Stat: this.createGoalList.gl_Stat,
+                    gl_Description: this.createGoalList.gl_Description,
+                    gl_StartDate: this.createGoalList.gl_StartDate,
+                    gl_EndDate: this.createGoalList.gl_EndDate,
+                }),
+            })
+                .then(response => response.json())
+                .then (data => {
                     // blank out create fields
                     this.createGoalList.gl_URootKey = ''
                     this.createGoalList.gl_Name = ''
@@ -174,15 +188,17 @@ export default {
                     this.createGoalList.gl_StartDate = this.currentDate
                     this.createGoalList.gl_EndDate = this.currentDate
                     // add the goal to the list
-                    this.goallists.push(response.data)
-            })
+                    this.goallists.push(data)                    
+                })
                 .catch((error) => {
                     this.createError = error
             });
         },
         async removegoallist(item, i) {
-            const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'
-            await axios.delete(url+ item._id);
+            const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'+ item._id
+            await fetch (url, {
+                method: "DELETE"
+            })
             this.goallists.splice(i, 1);       
         }, 
         async updategoallist(item) {
