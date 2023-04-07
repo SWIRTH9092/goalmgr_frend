@@ -39,7 +39,7 @@
 
 import AuthNavBar from "@/composables/auth/AuthNavBar.vue";
 import router from "@/router";
-import axios from "axios";
+// import axios from "axios";
 export default {
     name: "LoginView",
     data() {
@@ -70,23 +70,47 @@ export default {
             if (!this.useridError) {
                 if (!this.passwordError) {
                     const url = process.env.VUE_APP_ROOT_API + '/auth/login'
-                    await axios
-                        .post(url, {
+                    const loginData =   { 
                         u_Userid: this.u_Userid,
                         u_Password: this.u_Password
-                    })
-                        .then((response) => {
+                        };                      
+                        await fetch (url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(loginData),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
                             this.isLoggedIn = true;
-                            localStorage.setItem("isLoggedIn", "true");
-                            this.u_RootKey = response.data.u_RootKey;
+                            localStorage.setItem("isLoggedIn", "true");                         
+                            this.u_RootKey = data.u_RootKey;
                             localStorage.setItem("u_RootKey", this.u_RootKey);                  
                             router.push({ name: "GoalListView" });
-                    })
+                        })
                         .catch((error) => {
                             this.isLoggedIn = false;
                             localStorage.setItem("isLoggedIn", "false");
-                            this.loginError = `create Unsuccessful - ${error}`;
-                    });
+                            this.loginError = `login Unsuccessful - ${error}`;
+                        });
+                    // await axios
+                    //     .post(url, {
+                    //     u_Userid: this.u_Userid,
+                    //     u_Password: this.u_Password
+                    // })
+                    //     .then((response) => {
+                    //         this.isLoggedIn = true;
+                    //         localStorage.setItem("isLoggedIn", "true");
+                    //         this.u_RootKey = response.data.u_RootKey;
+                    //         localStorage.setItem("u_RootKey", this.u_RootKey);                  
+                    //         router.push({ name: "GoalListView" });
+                    // })
+                    //     .catch((error) => {
+                    //         this.isLoggedIn = false;
+                    //         localStorage.setItem("isLoggedIn", "false");
+                    //         this.loginError = `create Unsuccessful - ${error}`;
+                    // });
                 }
             }
         }
