@@ -18,6 +18,7 @@ export default {
       logout() {
         localStorage.removeItem('isLoggedIn')
         localStorage.removeItem('u_RootKey')
+        localStorage.removeItem("updateGLData")
         router.push({ name: "Home" });
         }      
 
