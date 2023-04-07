@@ -51,7 +51,6 @@
 <script>
 
 import router from "@/router";
-import axios from "axios";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
 export default {
     name: "GoalListUpdate",
@@ -99,16 +98,22 @@ export default {
             //  update create record with the userid root key: u_rootkey 
             //     from local storage
             const docToUpate = this.updateGoalList._id
+            const bodyToUpdate = this.updateGoalList
             const url = process.env.VUE_APP_ROOT_API + '/goallist/update/' + docToUpate
-            await axios
-                .put(url, this.updateGoalList)
-                .then(() => {
-                    localStorage.removeItem("updateGLData")
-                    router.push( {name: "GoalListView"} )  
+            await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify (bodyToUpdate),
+            })
+            .then(() => {
+                localStorage.removeItem("updateGLData")
+                router.push( {name: "GoalListView"} )  
              })
-                .catch((error) => {
-                    this.updateError = error;
-            });
+            .catch((error) => {
+                this.updateError = error;
+            })
         },
     } 
 }
