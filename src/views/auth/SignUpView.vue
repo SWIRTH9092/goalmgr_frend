@@ -53,9 +53,10 @@
                 v-model="createUserid.u_CellPhoneNumber" 
                 required 
                 placeholder="1234567890" 
-                pattern="[0-9]{10}"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                 >
-
+            <small>Format: 123-456-7890</small>
+            
             <div class="submit">
                 <button class="button-normal">Create Signon</button>
             </div>
@@ -65,7 +66,6 @@
 <script>
 
 import AuthNavBar from "../../composables/auth/AuthNavBar.vue"
-import axios from "axios";
 import router from "@/router";
 
 export default {
@@ -103,8 +103,13 @@ export default {
             if(!this.useridError ) {
                 if(!this.passwordError) {
                     const url = process.env.VUE_APP_ROOT_API + '/auth/signup'
-                    await axios
-                        .post(url, this.createUserid)
+                    await fetch (url, {  
+                            method: "POST",
+                            headers: {
+                            "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(this.createUserid),
+                        })
                         .then(() => {
                         router.push({ name: "LoginView" });    
                     })
