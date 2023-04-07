@@ -93,6 +93,7 @@ export default {
             u_RootKey: '',
             isLoggedIn: '',
             createError: '',
+            deleteError: '',
             currentDate: '',
             viewCreate: '',
             goallists: [],
@@ -196,10 +197,21 @@ export default {
         },
         async removegoallist(item, i) {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'+ item._id
-            await fetch (url, {
-                method: "DELETE"
-            })
-            this.goallists.splice(i, 1);       
+            if (confirm("Are you sure you want to delete this goal from your list?")) {
+                await fetch (url, {
+                    method: "DELETE"
+                })
+                .then (response => {
+                    if (response.ok) {
+                        this.goallists.splice(i, 1); 
+                    } else {
+                        throw new Error("Error in delte")
+                    }   
+                })
+                .catch((error) => {
+                    this.deleteError = error
+                })   
+            } 
         }, 
         async updategoallist(item) {
             localStorage.setItem('updateGLData', JSON.stringify(item))
