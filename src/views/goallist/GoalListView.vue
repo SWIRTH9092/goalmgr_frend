@@ -60,8 +60,8 @@
                             </div>
                             <p class="goallist-name">{{ goallist.gl_Name }}</p>
                             <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>
-                            <span class="goal-data"> StartDate: {{ goallist.gl_StartDate }}</span>
-                            <span class="goal-data">EndDate: {{ goallist.gl_EndDate }}</span>                                
+                            <span class="goal-data"> Start Date: {{ goallist.displayStartDate }}</span>
+                            <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span>                                
 
                             <br>
                             <div goal-button-container>
@@ -86,6 +86,7 @@
 
 import router from "@/router";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
+import { displayDateFormat } from "../../assets/global.js"
 export default {
     name: "GoalListView",
     data() {
@@ -149,6 +150,12 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.goallists = data;
+                    this.goallists.forEach((goallist) => {
+                        const startDate = displayDateFormat(goallist.gl_StartDate)
+                        const endDate = displayDateFormat(goallist.gl_EndDate)
+                        goallist.displayStartDate = startDate
+                        goallist.displayEndDate = endDate
+                    })
                 })
                 .catch((error) => {
                     this.loginError = `Getting Data Unsuccessful - ${error}`;
@@ -162,33 +169,28 @@ export default {
             //  update create record with the userid root key: u_rootkey 
             //     from local storage
             this.createGoalList.gl_URootKey = localStorage.getItem('u_RootKey')
-
+            const createData = this.createGoalList
             const url = process.env.VUE_APP_ROOT_API + '/goallist/create'
             await fetch (url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                  },
-                 body: JSON.stringify({
-
-                    gl_URootKey: this.createGoalList.gl_URootKey,
-                    gl_Name: this.createGoalList.gl_Name,
-                    gl_Stat: this.createGoalList.gl_Stat,
-                    gl_Description: this.createGoalList.gl_Description,
-                    gl_StartDate: this.createGoalList.gl_StartDate,
-                    gl_EndDate: this.createGoalList.gl_EndDate,
-                }),
+                 body: JSON.stringify(createData)
+                ,
             })
                 .then(response => response.json())
                 .then (data => {
                     // blank out create fields
+
                     this.createGoalList.gl_URootKey = ''
                     this.createGoalList.gl_Name = ''
                     this.createGoalList.gl_Stat = ''
                     this.createGoalList.gl_Description = ''
                     this.createGoalList.gl_StartDate = this.currentDate
                     this.createGoalList.gl_EndDate = this.currentDate
-                    // add the goal to the list
+                    data.displayStartDate = displayDateFormat(data.gl_StartDate) 
+                    data.displayEndDate = displayDateFormat(data.gl_EndDate)  
                     this.goallists.push(data)                    
                 })
                 .catch((error) => {
