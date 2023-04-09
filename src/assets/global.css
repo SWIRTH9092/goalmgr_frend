@@ -27,7 +27,7 @@ body {
     --titlefont: 'Bebas Neue', cursive;
     --textfont: 'Source Sans Pro', sans-serif;
     --grid-gap: 30px;
-    --grid-min: 225px
+    --grid-card-min: 350px
   }
 
   #app {
@@ -126,7 +126,8 @@ body {
 
   .goaldata-container{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--grid-min), max-content));
+    /*grid-template-columns: repeat(auto-fit, minmax(var(--grid-min), max-content)); */
+    grid-template-columns: repeat(auto-fit, minmax(var(--grid-card-min), max-content));
     grid-gap: var(--grid-gap);
     justify-content: center;
   }
@@ -135,7 +136,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 350px;
+    width: var(--grid-card-min);
     border: var(--color11) solid 7px;
     border-radius: 10px;
   }
