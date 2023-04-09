@@ -35,7 +35,7 @@
                     <input type="date" 
                         v-model="createGoalList.gl_EndDate" 
                     >
-                        
+                    <div v-if="dateError" class="error" > {{ dateError }}</div>    
                     <div class="submit">
                         <button class="button-normal">Create Goal</button>
                     </div>
@@ -95,6 +95,7 @@ export default {
             isLoggedIn: '',
             createError: '',
             deleteError: '',
+            dateError: '',
             currentDate: '',
             viewCreate: '',
             goallists: [],
@@ -165,38 +166,43 @@ export default {
 
         async handleCreateGoal(e) { 
             e.preventDefault();
+            this.dateError = this.createGoalList.gl_StartDate > this.createGoalList.gl_EndDate ?
+            'start date can not be greater than end date' : ''
 
-            //  update create record with the userid root key: u_rootkey 
-            //     from local storage
-            this.createGoalList.gl_URootKey = localStorage.getItem('u_RootKey')
-            const createData = this.createGoalList
-            const url = process.env.VUE_APP_ROOT_API + '/goallist/create'
-            await fetch (url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                 },
-                 body: JSON.stringify(createData)
-                ,
-            })
-                .then(response => response.json())
-                .then (data => {
-                    // blank out create fields
-
-                    this.createGoalList.gl_URootKey = ''
-                    this.createGoalList.gl_Name = ''
-                    this.createGoalList.gl_Stat = ''
-                    this.createGoalList.gl_Description = ''
-                    this.createGoalList.gl_StartDate = this.currentDate
-                    this.createGoalList.gl_EndDate = this.currentDate
-                    data.displayStartDate = displayDateFormat(data.gl_StartDate) 
-                    data.displayEndDate = displayDateFormat(data.gl_EndDate)  
-                    this.goallists.push(data)                    
+                if (!this.dateError) {
+                //  update create record with the userid root key: u_rootkey 
+                //     from local storage
+                this.createGoalList.gl_URootKey = localStorage.getItem('u_RootKey')
+                const createData = this.createGoalList
+                const url = process.env.VUE_APP_ROOT_API + '/goallist/create'
+                await fetch (url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(createData)
+                    ,
                 })
-                .catch((error) => {
-                    this.createError = error
-            });
+                    .then(response => response.json())
+                    .then (data => {
+                        // blank out create fields
+
+                        this.createGoalList.gl_URootKey = ''
+                        this.createGoalList.gl_Name = ''
+                        this.createGoalList.gl_Stat = ''
+                        this.createGoalList.gl_Description = ''
+                        this.createGoalList.gl_StartDate = this.currentDate
+                        this.createGoalList.gl_EndDate = this.currentDate
+                        data.displayStartDate = displayDateFormat(data.gl_StartDate) 
+                        data.displayEndDate = displayDateFormat(data.gl_EndDate)  
+                        this.goallists.push(data)                    
+                    })
+                    .catch((error) => {
+                        this.createError = error
+                });
+            }
         },
+
         async removegoallist(item, i) {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'+ item._id
             if (confirm("Are you sure you want to delete this goal from your list?")) {
