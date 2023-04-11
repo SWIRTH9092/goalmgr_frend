@@ -9,13 +9,14 @@
                     <input type="text" 
                         v-model="createGoalList.gl_Name" 
                         placeholder="goal name" 
+                        maxlength="25"
                         required 
                     >
 
                     <label for="status">Choose a Status:</label>
                         <select name="status" id="status" v-model="createGoalList.gl_Stat">
                             <option value="Not Started">Not started</option>
-                            <option value="In Progress">In Progress</option>
+                            <option value="In Process">In Process</option>
                             <option value="Completed">Completed</option>
                         </select>
                     <br>
@@ -49,19 +50,84 @@
             </div>  
             <div>
                 <br>
-                <br>
-                <h2>Goals</h2>
+                <h2>In Process Goals</h2>
+                <button @click="handleSort('In Process', 'priority')">Priority</button>
+                <button @click="handleSort('In Process', 'name')">Name</button>
+                <button @click="handleSort('In Process', 'start date')">Start Date</button>
+                <button @click="handleSort('In Process', 'end date')">End Date</button>
                 <br>
                 <div class="goaldata-container">
-                    <div v-for="(goallist, i) in goallists" :key="goallist._id">
+                    <div v-for="(goallist, i) in goallists_InProcess" :key="goallist._id">
                         <div class="goalitems">
-                            <div class="goalname">
-                                <p>Goal</p>
+                            <div class="goallist-name">
+                                <p >{{ goallist.gl_Name }}</p>
                             </div>
-                            <p class="goallist-name">{{ goallist.gl_Name }}</p>
-                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>
-                            <span class="goal-data"> Start Date: {{ goallist.displayStartDate }}</span>
+                            <br>
+                            <span class="goal-data">Start Date: {{ goallist.displayStartDate }}</span>
                             <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span>                                
+                            <span class="goal-data">Priority: {{ goallist.gl_SortOrder }}</span>
+                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>                           
+                            <br>
+                            <div goal-button-container>
+                                <button class="goal-buttons" 
+                                    @click="updategoallist(goallist)" >Update</button>                            
+                                <button class="goal-buttons" 
+                                    @click="removegoallist(goallist, i)">Delete</button>
+                            </div>
+                            <br>
+                        </div>
+
+                    </div>
+                </div>
+                <br>
+                <h2>Not Started Goals</h2>
+                <button @click="handleSort('Not Started', 'priority')">Priority</button>
+                <button @click="handleSort('Not Started', 'name')">Name</button>
+                <button @click="handleSort('Not Started', 'start date')">Start Date</button>
+                <button @click="handleSort('Not Started', 'end date')">End Date</button>
+                <br>
+                <div class="goaldata-container">
+                    <div v-for="(goallist, i) in goallists_NotStarted" :key="goallist._id">
+                        <div class="goalitems">
+                            <div class="goallist-name">
+                                <p >{{ goallist.gl_Name }}</p>
+                            </div>
+                            <br>
+                            <span class="goal-data"> Start Date: {{ goallist.displayStartDate }}</span>
+                            <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span> 
+                            <span class="goal-data">Priority: {{ goallist.gl_SortOrder }}</span>
+                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>                                 
+
+                            <br>
+                            <div goal-button-container>
+                                <button class="goal-buttons" 
+                                    @click="updategoallist(goallist)" >Update</button>                            
+                                <button class="goal-buttons" 
+                                    @click="removegoallist(goallist, i)">Delete</button>
+                            </div>
+                            <br>
+                        </div>
+
+                    </div>
+                </div>
+                <br>
+                <h2>Completed</h2>
+                <button @click="handleSort('Completed', 'priority')">Priority</button>
+                <button @click="handleSort('Completed', 'name')">Name</button>
+                <button @click="handleSort('Completed', 'start date')">Start Date</button>
+                <button @click="handleSort('Completed', 'end date')">End Date</button>
+                <br>
+                <div class="goaldata-container">
+                    <div v-for="(goallist, i) in goallists_Completed" :key="goallist._id">
+                        <div class="goalitems">
+                            <div class="goallist-name">
+                                <p >{{ goallist.gl_Name }}</p>
+                            </div>
+                            <br>
+                            <span class="goal-data"> Start Date: {{ goallist.displayStartDate }}</span>
+                            <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span> 
+                            <span class="goal-data">Priority: {{ goallist.gl_SortOrder }}</span>
+                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>                                 
 
                             <br>
                             <div goal-button-container>
@@ -86,7 +152,7 @@
 
 import router from "@/router";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
-import { displayDateFormat } from "../../assets/global.js"
+import { displayDateFormat, byEndDate, byStartDate, byPriority, byName } from "../../assets/global.js"
 export default {
     name: "GoalListView",
     data() {
@@ -99,6 +165,9 @@ export default {
             currentDate: '',
             viewCreate: '',
             goallists: [],
+            goallists_NotStarted: [],
+            goallists_InProcess: [],
+            goallists_Completed:  [],
             createGoalList: {
                 gl_URootKey: '',
                 gl_RootKey: '',
@@ -156,7 +225,22 @@ export default {
                         const endDate = displayDateFormat(goallist.gl_EndDate)
                         goallist.displayStartDate = startDate
                         goallist.displayEndDate = endDate
+                        // create 3 separate status data objects
+                        if (goallist.gl_Stat === 'In Process') {
+                            this.goallists_InProcess.push(goallist)  
+                        } else {
+                            if (goallist.gl_Stat === 'Not Started') {
+                                this.goallists_NotStarted.push(goallist) 
+
+                            } else {
+                                this.goallists_Completed.push(goallist)                                  
+                            }
+                        }
+                        this.handleSort("In Process", "priority")
+                        this.handleSort("Not Started", "start date")
+                        this.handleSort("Completed", "end date")
                     })
+
                 })
                 .catch((error) => {
                     this.loginError = `Getting Data Unsuccessful - ${error}`;
@@ -195,14 +279,92 @@ export default {
                         this.createGoalList.gl_EndDate = this.currentDate
                         data.displayStartDate = displayDateFormat(data.gl_StartDate) 
                         data.displayEndDate = displayDateFormat(data.gl_EndDate)  
-                        this.goallists.push(data)                    
+                        this.goallists.push(data) 
+                        if (data.gl_Stat === 'In Process') {
+                            this.goallists_InProcess.push(data)  
+                        } else {
+                            if (data.gl_Stat === 'Not Started') {
+                                this.goallists_NotStarted.push(data) 
+
+                            } else {
+                                this.goallists_Completed.push(data)                                  
+                            }
+                        }                   
                     })
                     .catch((error) => {
                         this.createError = error
                 });
             }
         },
-
+        handleSort (status, item) {
+            if (status === "In Process") {
+                let work_InProcess = []
+                switch (item) {
+                    case 'priority':
+                        work_InProcess = this.goallists_InProcess.sort(byPriority)
+                        break;
+                    case 'name':  
+                        work_InProcess = this.goallists_InProcess.sort(byName)  
+                        break; 
+                    case 'start date':  
+                        work_InProcess = this.goallists_InProcess.sort(byStartDate)  
+                        break; 
+                    case 'end date':  
+                        work_InProcess = this.goallists_InProcess.sort(byEndDate)  
+                        break;   
+                    default:
+                        console.log("default", status, item) 
+                        work_InProcess = this.goallists_InProcess.sort(byPriority)
+                        break;               
+                }
+                this.goallists_InProcess = []
+                this.goallists_InProcess = work_InProcess               
+            } else if (status === "Not Started") {
+                let work_NotStarted = []
+                switch (item) {
+                    case 'priority':
+                        work_NotStarted = this.goallists_NotStarted.sort(byPriority)
+                        break;
+                    case 'name':  
+                        work_NotStarted = this.goallists_NotStarted.sort(byName)  
+                        break; 
+                    case 'start date':  
+                        work_NotStarted = this.goallists_NotStarted.sort(byStartDate)  
+                        break; 
+                    case 'end date':  
+                        work_NotStarted = this.goallists_NotStarted.sort(byEndDate)  
+                        break;   
+                    default:
+                        console.log("default", status, item) 
+                        work_NotStarted = this.goallists_NotStarted.sort(byPriority)
+                        break;               
+                }
+                this.goallists_NotStarted = []
+                this.goallists_NotStarted = work_NotStarted
+            } else if (status === "Completed") {
+                let work_Completed = []
+                switch (item) {
+                    case 'priority':
+                        work_Completed = this.goallists_Completed.sort(byPriority)
+                        break;
+                    case 'name':  
+                        work_Completed = this.goallists_Completed.sort(byName)  
+                        break; 
+                    case 'start date':  
+                        work_Completed = this.goallists_Completed.sort(byStartDate)  
+                        break; 
+                    case 'end date':  
+                        work_Completed = this.goallists_Completed.sort(byEndDate)  
+                        break;   
+                    default:
+                        console.log("default", status, item) 
+                        work_Completed= this.goallists_Completed.sort(byPriority)
+                        break;               
+                }
+                this.goallists_Completed = []
+                this.goallists_Completed = work_Completed
+            }  else {console.log("status not found", status, item)}  
+        },
         async removegoallist(item, i) {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'+ item._id
             if (confirm("Are you sure you want to delete this goal from your list?")) {

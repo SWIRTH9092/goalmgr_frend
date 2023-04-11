@@ -10,6 +10,7 @@
                     <input type="text" 
                         v-model="updateGoalList.gl_Name" 
                         placeholder="goal name" 
+                        maxlength="25"
                         required 
                     >
 
@@ -17,7 +18,7 @@
                         <select name="status" id="status" 
                         v-model="updateGoalList.gl_Stat">
                             <option value="Not Started">Not started</option>
-                            <option value="In Progress">In Progress</option>
+                            <option value="In Process">In Process</option>
                             <option value="Completed">Completed</option>
                         </select>
                     <br>
