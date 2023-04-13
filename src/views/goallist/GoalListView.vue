@@ -26,6 +26,13 @@
                         v-model="createGoalList.gl_Description" 
                         placeholder="description" 
                         >
+                        
+                    <label>Priority:</label>        
+                    <input type="number" 
+                        v-model="createGoalList.gl_SortOrder" 
+                        maxlength="4"
+                        required
+                    >
 
                     <label>Start Date:</label>        
                     <input type="date" 
@@ -159,6 +166,9 @@ export default {
         return {
             u_RootKey: '',
             isLoggedIn: '',
+            glInProcessSort: '',
+            glNotStartedSort: '',
+            glCompletedSort: '',
             createError: '',
             deleteError: '',
             dateError: '',
@@ -236,11 +246,36 @@ export default {
                                 this.goallists_Completed.push(goallist)                                  
                             }
                         }
-                        this.handleSort("In Process", "priority")
-                        this.handleSort("Not Started", "start date")
-                        this.handleSort("Completed", "end date")
                     })
+                    // process Session storage - for status - sort criteria
+                    //   if no Session storage then use defaults
 
+                    this.glInProcessSort = sessionStorage.getItem("glInProcessSort")
+                    //  "in process" status
+                    if (!this.glInProcessSort) {
+                        // no session storage - default to priority]
+                        this.glInProcessSort = "priority"
+                        sessionStorage.setItem("glInProcessSort", this.glInProcessSort)
+                    }                  
+                    this.handleSort("In Process", this.glInProcessSort)
+
+                    //  "not started" status
+                    this.glNotStartedSort = sessionStorage.getItem("glNotStartedSort")
+                    if (!this.glNotStartedSort) {
+                        // no session storage - default to start date
+                        sessionStorage.setItem("glNotStartedSort", "start date")
+                        this.glInProcessSort = "start date";
+                    }                        
+                    this.handleSort("Not Started", this.glNotStartedSort)
+
+                    //  "completed" status  - default to end date
+                    this.glCompletedSort = sessionStorage.getItem("glCompletedSort")
+                    if (!this.glCompletedSort) {
+                        // no session storage - default to end date
+                        sessionStorage.setItem("glCompletedSort", "end date")
+                        this.glCompletedSort = "end date";
+                    }
+                    this.handleSort("Completed", this.glCompletedSort)
                 })
                 .catch((error) => {
                     this.loginError = `Getting Data Unsuccessful - ${error}`;
@@ -270,32 +305,43 @@ export default {
                     .then(response => response.json())
                     .then (data => {
                         // blank out create fields
-
                         this.createGoalList.gl_URootKey = ''
                         this.createGoalList.gl_Name = ''
                         this.createGoalList.gl_Stat = ''
                         this.createGoalList.gl_Description = ''
+                        this.createGoalList.gl_SortOrder = '99'
                         this.createGoalList.gl_StartDate = this.currentDate
                         this.createGoalList.gl_EndDate = this.currentDate
                         data.displayStartDate = displayDateFormat(data.gl_StartDate) 
                         data.displayEndDate = displayDateFormat(data.gl_EndDate)  
-                        this.goallists.push(data) 
-                        if (data.gl_Stat === 'In Process') {
-                            this.goallists_InProcess.push(data)  
-                        } else {
-                            if (data.gl_Stat === 'Not Started') {
-                                this.goallists_NotStarted.push(data) 
 
-                            } else {
-                                this.goallists_Completed.push(data)                                  
-                            }
-                        }                   
+                        // push data to main data list
+                        this.goallists.push(data) 
+
+                        //Update sorted goallist by status and then resort into order
+                        if (data.gl_Stat === 'In Process') {
+                            this.goallists_InProcess.push(data) 
+                            this.handleSort("In Process", this.glInProcessSort) 
+                        } else if (data.gl_Stat === 'Not Started') {
+                            this.goallists_NotStarted.push(data) 
+                            this.handleSort("Not Started", this.glNotStartedSort)
+                        } else {
+                            this.goallists_Completed.push(data) 
+                            this.handleSort("Completed", this.glCompleted)                               
+                        }                  
                     })
                     .catch((error) => {
                         this.createError = error
                 });
             }
         },
+
+        //   Sorts the goallist into order for display
+        //   Input status - "In Process", "Not Started" or "Completed"
+        //         item   - Type of sort:  "Priority" (glSortorder), 
+        //                                 "name" (glName)
+        //                                 "start date" (glStartDate)
+        //                                 "end date" (glEndDate)
         handleSort (status, item) {
             if (status === "In Process") {
                 let work_InProcess = []
@@ -313,12 +359,13 @@ export default {
                         work_InProcess = this.goallists_InProcess.sort(byEndDate)  
                         break;   
                     default:
-                        console.log("default", status, item) 
                         work_InProcess = this.goallists_InProcess.sort(byPriority)
                         break;               
                 }
                 this.goallists_InProcess = []
-                this.goallists_InProcess = work_InProcess               
+                this.goallists_InProcess = work_InProcess 
+                sessionStorage.setItem("glInProcessSort", item)  
+
             } else if (status === "Not Started") {
                 let work_NotStarted = []
                 switch (item) {
@@ -335,12 +382,13 @@ export default {
                         work_NotStarted = this.goallists_NotStarted.sort(byEndDate)  
                         break;   
                     default:
-                        console.log("default", status, item) 
                         work_NotStarted = this.goallists_NotStarted.sort(byPriority)
                         break;               
                 }
                 this.goallists_NotStarted = []
                 this.goallists_NotStarted = work_NotStarted
+                sessionStorage.setItem("glNotStartedSort", item)
+
             } else if (status === "Completed") {
                 let work_Completed = []
                 switch (item) {
@@ -357,12 +405,12 @@ export default {
                         work_Completed = this.goallists_Completed.sort(byEndDate)  
                         break;   
                     default:
-                        console.log("default", status, item) 
                         work_Completed= this.goallists_Completed.sort(byPriority)
                         break;               
                 }
                 this.goallists_Completed = []
                 this.goallists_Completed = work_Completed
+                sessionStorage.setItem("glCompletedSort", item)
             }  else {console.log("status not found", status, item)}  
         },
         async removegoallist(item, i) {
@@ -373,7 +421,13 @@ export default {
                 })
                 .then (response => {
                     if (response.ok) {
-                        this.goallists.splice(i, 1); 
+                        if (response.gl_Stat === 'In Process') {
+                            this.goallists_InProcess.splice(i, 1); 
+                        } else if (response.gl_Stat === 'Not Started') {
+                            this.goallists_NotStarted.splice(i, 1); 
+                        } else {
+                            this.goallists_Completed.splice(i, 1);                                        
+                        }
                     } else {
                         throw new Error("Error in delte")
                     }   
