@@ -159,7 +159,7 @@
 
 import router from "@/router";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
-import { displayDateFormat, byEndDate, byStartDate, byPriority, byName } from "../../assets/global.js"
+import { displayDateFormat, determineSortBy, getItemStorage, setItemStorage } from "../../assets/global.js"
 export default {
     name: "GoalListView",
     data() {
@@ -250,29 +250,29 @@ export default {
                     // process Session storage - for status - sort criteria
                     //   if no Session storage then use defaults
 
-                    this.glInProcessSort = sessionStorage.getItem("glInProcessSort")
+                    this.glInProcessSort = getItemStorage("glInProcessSort")
                     //  "in process" status
                     if (!this.glInProcessSort) {
                         // no session storage - default to priority]
                         this.glInProcessSort = "priority"
-                        sessionStorage.setItem("glInProcessSort", this.glInProcessSort)
+                        setItemStorage("glInProcessSort", this.glInProcessSort)
                     }                  
                     this.handleSort("In Process", this.glInProcessSort)
 
                     //  "not started" status
-                    this.glNotStartedSort = sessionStorage.getItem("glNotStartedSort")
+                    this.glNotStartedSort = getItemStorage("glNotStartedSort")
                     if (!this.glNotStartedSort) {
                         // no session storage - default to start date
-                        sessionStorage.setItem("glNotStartedSort", "start date")
-                        this.glInProcessSort = "start date";
+                        setItemStorage("glNotStartedSort", "start date")
+                        this.glNotStartedSort = "start date";
                     }                        
                     this.handleSort("Not Started", this.glNotStartedSort)
 
                     //  "completed" status  - default to end date
-                    this.glCompletedSort = sessionStorage.getItem("glCompletedSort")
+                    this.glCompletedSort = getItemStorage("glCompletedSort")
                     if (!this.glCompletedSort) {
                         // no session storage - default to end date
-                        sessionStorage.setItem("glCompletedSort", "end date")
+                        setItemStorage("glCompletedSort", "end date")
                         this.glCompletedSort = "end date";
                     }
                     this.handleSort("Completed", this.glCompletedSort)
@@ -342,76 +342,25 @@ export default {
         //                                 "name" (glName)
         //                                 "start date" (glStartDate)
         //                                 "end date" (glEndDate)
-        handleSort (status, item) {
+        handleSort (status, sortBy) {
             if (status === "In Process") {
-                let work_InProcess = []
-                switch (item) {
-                    case 'priority':
-                        work_InProcess = this.goallists_InProcess.sort(byPriority)
-                        break;
-                    case 'name':  
-                        work_InProcess = this.goallists_InProcess.sort(byName)  
-                        break; 
-                    case 'start date':  
-                        work_InProcess = this.goallists_InProcess.sort(byStartDate)  
-                        break; 
-                    case 'end date':  
-                        work_InProcess = this.goallists_InProcess.sort(byEndDate)  
-                        break;   
-                    default:
-                        work_InProcess = this.goallists_InProcess.sort(byPriority)
-                        break;               
-                }
+                let work_InProcess = determineSortBy(this.goallists_InProcess, sortBy)
                 this.goallists_InProcess = []
-                this.goallists_InProcess = work_InProcess 
-                sessionStorage.setItem("glInProcessSort", item)  
+                this.goallists_InProcess = work_InProcess
+                setItemStorage("glInProcessSort", sortBy)  
 
             } else if (status === "Not Started") {
-                let work_NotStarted = []
-                switch (item) {
-                    case 'priority':
-                        work_NotStarted = this.goallists_NotStarted.sort(byPriority)
-                        break;
-                    case 'name':  
-                        work_NotStarted = this.goallists_NotStarted.sort(byName)  
-                        break; 
-                    case 'start date':  
-                        work_NotStarted = this.goallists_NotStarted.sort(byStartDate)  
-                        break; 
-                    case 'end date':  
-                        work_NotStarted = this.goallists_NotStarted.sort(byEndDate)  
-                        break;   
-                    default:
-                        work_NotStarted = this.goallists_NotStarted.sort(byPriority)
-                        break;               
-                }
+                let work_NotStarted = determineSortBy(this.goallists_NotStarted, sortBy)
                 this.goallists_NotStarted = []
                 this.goallists_NotStarted = work_NotStarted
-                sessionStorage.setItem("glNotStartedSort", item)
+                setItemStorage("glNotStartedSort", sortBy)
 
             } else if (status === "Completed") {
-                let work_Completed = []
-                switch (item) {
-                    case 'priority':
-                        work_Completed = this.goallists_Completed.sort(byPriority)
-                        break;
-                    case 'name':  
-                        work_Completed = this.goallists_Completed.sort(byName)  
-                        break; 
-                    case 'start date':  
-                        work_Completed = this.goallists_Completed.sort(byStartDate)  
-                        break; 
-                    case 'end date':  
-                        work_Completed = this.goallists_Completed.sort(byEndDate)  
-                        break;   
-                    default:
-                        work_Completed= this.goallists_Completed.sort(byPriority)
-                        break;               
-                }
+                let work_Completed = determineSortBy(this.goallists_Completed, sortBy)
                 this.goallists_Completed = []
                 this.goallists_Completed = work_Completed
-                sessionStorage.setItem("glCompletedSort", item)
-            }  else {console.log("status not found", status, item)}  
+                setItemStorage("glCompletedSort", sortBy)
+            }  else {console.log("status not found", status, sortBy)}  
         },
         async removegoallist(item, i) {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'+ item._id

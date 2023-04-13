@@ -11,14 +11,14 @@ export function displayDateFormat (inputDate) {
 
 // Object Sort by Stirng - Name
 //   Input:  an array occurence that contain the object gl_Name
-//   output: Return: 1   - a.gl_ Name is > b.gl_ Name
+//   Return: Return: 1   - a.gl_ Name is > b.gl_ Name
 //           Return: -1  - a.gl_ Name is < b.gl_ Name
 //           Return: 0   - the values are equal
 
 export function byName(a,b) {
-    if (a.gl_Name > b.gl_Name ) {
+    if (a.gl_Name.toUpperCase() > b.gl_Name.toUpperCase() ) {
         return 1; 
-    } else if (a.gl_Name < b.gl_Name)  { 
+    } else if (a.gl_Name.toUpperCase() < b.gl_Name.toUpperCase())  { 
         return -1;
     } else {
         return 0;
@@ -29,7 +29,7 @@ export function byName(a,b) {
 // Object Sort by date - gl_StartDate
 //   Input:  an array occurence that contain the object gl_StartDate
 //   Process: to process the date correctly, the date must be converted to a date
-//   output: Return new Date (a.gl_StartDate).valueOf() - new Date (b.gl_StartDate).valueOf();
+//   Return: Return new Date (a.gl_StartDate).valueOf() - new Date (b.gl_StartDate).valueOf();
 
 export function byStartDate(a,b) {
     return new Date (a.gl_StartDate).valueOf() - new Date (b.gl_StartDate).valueOf();
@@ -39,7 +39,7 @@ export function byStartDate(a,b) {
 // Object Sort by date - gl_EndDate
 //   Input:  an array occurence that contain the object gl_EndDate
 //   Process: to process the date correctly, the date must be converted to a date
-//   output: Return new Date (a.gl_EndDate).valueOf() - new Date (b.gl_EndDate).valueOf();
+//   Return: Return new Date (a.gl_EndDate).valueOf() - new Date (b.gl_EndDate).valueOf();
 
 export function byEndDate(a,b) {
     return new Date (a.gl_EndDate).valueOf() - new Date (b.gl_EndDate).valueOf();
@@ -50,7 +50,7 @@ export function byEndDate(a,b) {
 //   Input:  an array occurence that contain the object gl_SortOrder
 //   Process: to process the sort order correctly, the sort order must be 
 //            converted to an integer
-//   output: Return parseInt(a.gl_SortOrder) - parseInt(b.gl_SortOrder)
+//   Return:  parseInt(a.gl_SortOrder) - parseInt(b.gl_SortOrder)
 export function byPriority(a,b) {
 
     return parseInt(a.gl_SortOrder) - parseInt(b.gl_SortOrder)
@@ -61,7 +61,10 @@ export function byPriority(a,b) {
 //   Input:  an array occurence that contain the object gl_StartDate
 //   Process: to process the date correctly, the date must be converted to a date.  then
 //             the data is sorted into month day order (bypassing the year)
-//   output: 
+//   Return: 
+//           Return: 1   - d1.getUTCMonth() > d2.getUTCMonth())
+//           Return: -1  - d1.getUTCMonth() < d2.getUTCMonth()
+//           Return: 0   - d1.getUTCDate() - d2.getUTCDate()
 
 export function byStartDateMonthDay(a,b) {
     // by month and then by day
@@ -75,4 +78,56 @@ export function byStartDateMonthDay(a,b) {
         return d1.getUTCDate() - d2.getUTCDate()
     }
 
+}
+
+// read from user storage
+//   Input:  user storage keyword (required)
+//   Return: return storage value
+
+export function getItemStorage (storageKeyName) {
+        return localStorage.getItem(storageKeyName) 
+}
+// set to user storage
+//   Input:  user storage keyword (required)
+//   return: 0 
+
+export function setItemStorage (storageKeyName, storageKeyValue) {
+        localStorage.setItem(storageKeyName, storageKeyValue)
+        return 0
+}
+
+// remove from User Storage
+//   Input:  user storage keyword (required)
+//   Return: 0
+export function removeItemStorage (storageKeyName) {
+        localStorage.removeItem(storageKeyName) 
+        return 0  
+}
+
+// Determine Sort Type
+//   Input:  data - an array of objects
+//           sortby:  priority, name, startdate or enddate - if invalid
+//                    sort by, defaults to sort by name
+//   Return: sorted data - an array of objects
+
+export function determineSortBy(data, sortBy) {
+    let work_sortData = []
+    switch (sortBy) {
+        case 'priority':
+            work_sortData = data.sort(byPriority)
+            break;
+        case 'name':  
+            work_sortData = data.sort(byName)  
+            break; 
+        case 'start date':  
+            work_sortData = data.sort(byStartDate)  
+            break; 
+        case 'end date':  
+            work_sortData = data.sort(byEndDate)  
+            break;   
+        default:
+            work_sortData = data.sort(byName)
+            break;               
+    } 
+    return work_sortData;
 }
