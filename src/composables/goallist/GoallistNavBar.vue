@@ -11,14 +11,15 @@
 <script>
 
 import router from "@/router";
+import { removeItemStorage } from "@/assets/global";
 
 export default {
     methods: {
 
       logout() {
-        localStorage.removeItem('isLoggedIn')
-        localStorage.removeItem('u_RootKey')
-        localStorage.removeItem("updateGLData")
+        removeItemStorage ('isLoggedIn')
+        removeItemStorage ('u_RootKey')
+        removeItemStorage ("updateGLData")
         router.push({ name: "Home" });
         }      
 

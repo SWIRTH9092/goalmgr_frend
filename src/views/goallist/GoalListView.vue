@@ -66,15 +66,13 @@
                 <div class="goaldata-container">
                     <div v-for="(goallist, i) in goallists_InProcess" :key="goallist._id">
                         <div class="goalitems">
-                            <div class="goallist-name">
-                                <p >{{ goallist.gl_Name }}</p>
-                            </div>
-                            <br>
-                            <span class="goal-data">Start Date: {{ goallist.displayStartDate }}</span>
-                            <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span>                                
-                            <span class="goal-data">Priority: {{ goallist.gl_SortOrder }}</span>
-                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>                           
-                            <br>
+
+                            <GoallistCard :cardName="goallist.gl_Name" 
+                                          :cardEndDate="goallist.displayEndDate" 
+                                          :cardStartDate="goallist.displayStartDate"                   
+                                          :cardPriority="goallist.gl_SortOrder"
+                                          />
+                                          
                             <div goal-button-container>
                                 <button class="goal-buttons" 
                                     @click="updategoallist(goallist)" >Update</button>                            
@@ -95,17 +93,14 @@
                 <br>
                 <div class="goaldata-container">
                     <div v-for="(goallist, i) in goallists_NotStarted" :key="goallist._id">
-                        <div class="goalitems">
-                            <div class="goallist-name">
-                                <p >{{ goallist.gl_Name }}</p>
-                            </div>
-                            <br>
-                            <span class="goal-data"> Start Date: {{ goallist.displayStartDate }}</span>
-                            <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span> 
-                            <span class="goal-data">Priority: {{ goallist.gl_SortOrder }}</span>
-                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>                                 
+                        <div class="goalitems">           
+   
+                            <GoallistCard :cardName="goallist.gl_Name" 
+                                          :cardEndDate="goallist.displayEndDate" 
+                                          :cardStartDate="goallist.displayStartDate"                   
+                                          :cardPriority="goallist.gl_SortOrder"
+                                          />
 
-                            <br>
                             <div goal-button-container>
                                 <button class="goal-buttons" 
                                     @click="updategoallist(goallist)" >Update</button>                            
@@ -127,14 +122,12 @@
                 <div class="goaldata-container">
                     <div v-for="(goallist, i) in goallists_Completed" :key="goallist._id">
                         <div class="goalitems">
-                            <div class="goallist-name">
-                                <p >{{ goallist.gl_Name }}</p>
-                            </div>
-                            <br>
-                            <span class="goal-data"> Start Date: {{ goallist.displayStartDate }}</span>
-                            <span class="goal-data">End Date: {{ goallist.displayEndDate }}</span> 
-                            <span class="goal-data">Priority: {{ goallist.gl_SortOrder }}</span>
-                            <span class="goal-data">Status: {{ goallist.gl_Stat }}</span>                                 
+                            
+                            <GoallistCard :cardName="goallist.gl_Name" 
+                                          :cardEndDate="goallist.displayEndDate" 
+                                          :cardStartDate="goallist.displayStartDate"                   
+                                          :cardPriority="goallist.gl_SortOrder"
+                                          />                               
 
                             <br>
                             <div goal-button-container>
@@ -159,6 +152,7 @@
 
 import router from "@/router";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
+import GoallistCard from "../../composables/goallist/GoallistCard.vue"
 import { displayDateFormat, determineSortBy, getItemStorage, setItemStorage } from "../../assets/global.js"
 export default {
     name: "GoalListView",
@@ -191,7 +185,8 @@ export default {
          }
     },
     components: {
-        GoallistNavBar
+        GoallistNavBar,
+        GoallistCard
     },
   
     async mounted() {
