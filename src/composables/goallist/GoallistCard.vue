@@ -8,6 +8,7 @@
         <span class="goal-data"> Start Date: {{ cardStartDate }}</span><br>
         <span class="goal-data">End Date: {{ cardEndDate }}</span><br> 
         <span class="goal-data">Priority: {{ cardPriority }}</span><br>
+        <span class="goal-data">Status: {{ cardStat }}</span><br>
     </div>  
 
 </template>
@@ -19,7 +20,8 @@
             cardName: String,
             cardStartDate: String,
             cardEndDate: String,
-            cardPriority: String
+            cardPriority: Number,
+            cardStat: String,
          }
     }
 </script>
