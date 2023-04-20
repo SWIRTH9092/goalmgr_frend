@@ -57,79 +57,28 @@
             </div>  
             <div>
                 <br>
-                <h2>In Process Goals</h2>
-                <button @click="handleSort('In Process', 'priority')">Priority</button>
-                <button @click="handleSort('In Process', 'name')">Name</button>
-                <button @click="handleSort('In Process', 'start date')">Start Date</button>
-                <button @click="handleSort('In Process', 'end date')">End Date</button>
+                <button @click="displayChange('In Process')">In Process Goals</button>
+                <button @click="displayChange('Not Started')">Not Started Goals</button>
+                <button @click="displayChange('Completed')">Completed Goals</button>
+                <br>
+
+                <h2> {{ this.glDisplayStatus }} Goals</h2>
+                <button @click="handleDisplaySort('priority')">Priority</button>
+                <button @click="handleDisplaySort('name')">Name</button>
+                <button @click="handleDisplaySort('start date')">Start Date</button>
+                <button @click="handleDisplaySort('end date')">End Date</button>
                 <br>
                 <div class="goaldata-container">
-                    <div v-for="(goallist, i) in goallists_InProcess" :key="goallist._id">
+                    <div v-for="(goallist, i) in goallists_Display" :key="goallist._id">
                         <div class="goalitems">
 
                             <GoallistCard :cardName="goallist.gl_Name" 
                                           :cardEndDate="goallist.displayEndDate" 
                                           :cardStartDate="goallist.displayStartDate"                   
                                           :cardPriority="goallist.gl_SortOrder"
-                                          />
-                                          
-                            <div goal-button-container>
-                                <button class="goal-buttons" 
-                                    @click="updategoallist(goallist)" >Update</button>                            
-                                <button class="goal-buttons" 
-                                    @click="removegoallist(goallist, i)">Delete</button>
-                            </div>
-                            <br>
-                        </div>
-
-                    </div>
-                </div>
-                <br>
-                <h2>Not Started Goals</h2>
-                <button @click="handleSort('Not Started', 'priority')">Priority</button>
-                <button @click="handleSort('Not Started', 'name')">Name</button>
-                <button @click="handleSort('Not Started', 'start date')">Start Date</button>
-                <button @click="handleSort('Not Started', 'end date')">End Date</button>
-                <br>
-                <div class="goaldata-container">
-                    <div v-for="(goallist, i) in goallists_NotStarted" :key="goallist._id">
-                        <div class="goalitems">           
-   
-                            <GoallistCard :cardName="goallist.gl_Name" 
-                                          :cardEndDate="goallist.displayEndDate" 
-                                          :cardStartDate="goallist.displayStartDate"                   
-                                          :cardPriority="goallist.gl_SortOrder"
+                                          :cardStat="goallist.gl_Stat"
                                           />
 
-                            <div goal-button-container>
-                                <button class="goal-buttons" 
-                                    @click="updategoallist(goallist)" >Update</button>                            
-                                <button class="goal-buttons" 
-                                    @click="removegoallist(goallist, i)">Delete</button>
-                            </div>
-                            <br>
-                        </div>
-
-                    </div>
-                </div>
-                <br>
-                <h2>Completed</h2>
-                <button @click="handleSort('Completed', 'priority')">Priority</button>
-                <button @click="handleSort('Completed', 'name')">Name</button>
-                <button @click="handleSort('Completed', 'start date')">Start Date</button>
-                <button @click="handleSort('Completed', 'end date')">End Date</button>
-                <br>
-                <div class="goaldata-container">
-                    <div v-for="(goallist, i) in goallists_Completed" :key="goallist._id">
-                        <div class="goalitems">
-                            
-                            <GoallistCard :cardName="goallist.gl_Name" 
-                                          :cardEndDate="goallist.displayEndDate" 
-                                          :cardStartDate="goallist.displayStartDate"                   
-                                          :cardPriority="goallist.gl_SortOrder"
-                                          />                               
-
-                            <br>
                             <div goal-button-container>
                                 <button class="goal-buttons" 
                                     @click="updategoallist(goallist)" >Update</button>                            
@@ -163,6 +112,8 @@ export default {
             glInProcessSort: '',
             glNotStartedSort: '',
             glCompletedSort: '',
+            glDisplayStatus: '',
+            glDisplaySort: '',
             createError: '',
             deleteError: '',
             dateError: '',
@@ -172,6 +123,7 @@ export default {
             goallists_NotStarted: [],
             goallists_InProcess: [],
             goallists_Completed:  [],
+            goallists_Display: [],
             createGoalList: {
                 gl_URootKey: '',
                 gl_RootKey: '',
@@ -194,7 +146,7 @@ export default {
         this.u_RootKey = localStorage.getItem('u_RootKey')
         this.isLoggedIn = localStorage.getItem('isLoggedIn')
 
-        //get current date for 
+        //get current date for default date
         const currentDate = new Date();
             let currentDay = ''
             let currentMonth = ''
@@ -218,7 +170,7 @@ export default {
             this.createGoalList.gl_StartDate = currentDateFormatted
             this.createGoalList.gl_EndDate = currentDateFormatted
 
-                    //get data for list
+            //get data for list
             const url = process.env.VUE_APP_ROOT_API + '/goallist/index/' +     this.u_RootKey
 
             await fetch (url)
@@ -230,7 +182,8 @@ export default {
                         const endDate = displayDateFormat(goallist.gl_EndDate)
                         goallist.displayStartDate = startDate
                         goallist.displayEndDate = endDate
-                        // create 3 separate status data objects
+                        // create 3 separate status data objects:
+                        //   in process, not started, and completed
                         if (goallist.gl_Stat === 'In Process') {
                             this.goallists_InProcess.push(goallist)  
                         } else {
@@ -244,6 +197,7 @@ export default {
                     })
                     // process Session storage - for status - sort criteria
                     //   if no Session storage then use defaults
+                    //  Note: data is sorted and ready for display
 
                     this.glInProcessSort = getItemStorage("glInProcessSort")
                     //  "in process" status
@@ -251,8 +205,15 @@ export default {
                         // no session storage - default to priority]
                         this.glInProcessSort = "priority"
                         setItemStorage("glInProcessSort", this.glInProcessSort)
-                    }                  
+                    }     
+
+                    // Process Data into correct sort Order from last session         
                     this.handleSort("In Process", this.glInProcessSort)
+
+                    // default - display In Process
+                    this.goallists_Display  = this.goallists_InProcess
+                    this.glDisplaySort = this.glInProcessSort
+                    this.glDisplayStatus = "In Process";
 
                     //  "not started" status
                     this.glNotStartedSort = getItemStorage("glNotStartedSort")
@@ -260,7 +221,8 @@ export default {
                         // no session storage - default to start date
                         setItemStorage("glNotStartedSort", "start date")
                         this.glNotStartedSort = "start date";
-                    }                        
+                    }                
+                    // Process Data into correct sort Order from last session         
                     this.handleSort("Not Started", this.glNotStartedSort)
 
                     //  "completed" status  - default to end date
@@ -270,6 +232,7 @@ export default {
                         setItemStorage("glCompletedSort", "end date")
                         this.glCompletedSort = "end date";
                     }
+                    // Process Data into correct sort Order from last session      
                     this.handleSort("Completed", this.glCompletedSort)
                 })
                 .catch((error) => {
@@ -317,12 +280,15 @@ export default {
                         if (data.gl_Stat === 'In Process') {
                             this.goallists_InProcess.push(data) 
                             this.handleSort("In Process", this.glInProcessSort) 
+                            this.goallists_Display = this.goallists_InProcess
                         } else if (data.gl_Stat === 'Not Started') {
                             this.goallists_NotStarted.push(data) 
                             this.handleSort("Not Started", this.glNotStartedSort)
+                            this.goallists_Display = this.goallists_NotStarted
                         } else {
                             this.goallists_Completed.push(data) 
-                            this.handleSort("Completed", this.glCompleted)                               
+                            this.handleSort("Completed", this.glCompleted)
+                            this.goallists_Display = this.goallists_Completed                   
                         }                  
                     })
                     .catch((error) => {
@@ -332,6 +298,17 @@ export default {
         },
 
         //   Sorts the goallist into order for display
+        //   Input item   - Type of sort:  "Priority" (glSortorder), 
+        //                                 "name" (glName)
+        //                                 "start date" (glStartDate)
+        //                                 "end date" (glEndDate)
+        handleDisplaySort (sortBy) {
+            //  Sort the display data
+            this.goallists_Display = this.handleSort(this.glDisplayStatus, sortBy)
+        },
+
+
+        //   Sorts the goallist into order 
         //   Input status - "In Process", "Not Started" or "Completed"
         //         item   - Type of sort:  "Priority" (glSortorder), 
         //                                 "name" (glName)
@@ -340,22 +317,45 @@ export default {
         handleSort (status, sortBy) {
             if (status === "In Process") {
                 let work_InProcess = determineSortBy(this.goallists_InProcess, sortBy)
-                this.goallists_InProcess = []
                 this.goallists_InProcess = work_InProcess
-                setItemStorage("glInProcessSort", sortBy)  
-
+                setItemStorage("glInProcessSort", sortBy) 
+                this.glInProcessSort = this.glDisplaySort 
+                return work_InProcess
             } else if (status === "Not Started") {
                 let work_NotStarted = determineSortBy(this.goallists_NotStarted, sortBy)
-                this.goallists_NotStarted = []
                 this.goallists_NotStarted = work_NotStarted
                 setItemStorage("glNotStartedSort", sortBy)
-
+                this.glNotStartedSort = this.glDisplaySort 
+                return work_NotStarted
             } else if (status === "Completed") {
                 let work_Completed = determineSortBy(this.goallists_Completed, sortBy)
-                this.goallists_Completed = []
                 this.goallists_Completed = work_Completed
                 setItemStorage("glCompletedSort", sortBy)
+                this.glCompletedSort = this.glDisplaySort 
+                return work_Completed
             }  else {console.log("status not found", status, sortBy)}  
+        },
+        displayChange(status) {
+            //*** verify that there is a change
+            if (this.glDisplayStatus !== status) {
+                this.glDisplayStatus = status;
+                console.log("status:", status)
+                switch (status) {
+                    case "In Process":
+                        this.goallists_Display  = this.goallists_InProcess
+                        this.glDisplaySort = this.glInProcessSort 
+                        break;
+                    case "Not Started":
+                        console.log("in Not Started")
+                        this.goallists_Display  = this.goallists_NotStarted
+                        this.glDisplaySort = this.glInNotStarted 
+                        break;
+                    case "Completed":
+                        this.goallists_Display  = this.goallists_Completed 
+                        this.glDisplaySort = this.glCompletedSort
+                        break;
+                }
+            }
         },
         async removegoallist(item, i) {
             const url = process.env.VUE_APP_ROOT_API + '/goallist/delete/'+ item._id
@@ -367,11 +367,15 @@ export default {
                     if (response.ok) {
                         if (response.gl_Stat === 'In Process') {
                             this.goallists_InProcess.splice(i, 1); 
+                            this.goallists_Display = this.goallists_InProcess
                         } else if (response.gl_Stat === 'Not Started') {
                             this.goallists_NotStarted.splice(i, 1); 
+                            this.goallists_Display = this.goallists_NotStarted
                         } else {
-                            this.goallists_Completed.splice(i, 1);                                        
+                            this.goallists_Completed.splice(i, 1);   
+                            this.goallists_Display = this.goallists_Completed           
                         }
+
                     } else {
                         throw new Error("Error in delte")
                     }   

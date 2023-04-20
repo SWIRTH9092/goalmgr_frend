@@ -1,6 +1,10 @@
 body {
     margin: 0;
-    background-color: var(--color3)
+    background-color: var(--color3);
+    max-width: 2000px;
+    margin: 0 auto !important;
+    float: none !important;
+    text-align: center;
   }
   p {
     font-style: italic;

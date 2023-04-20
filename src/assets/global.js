@@ -112,6 +112,7 @@ export function removeItemStorage (storageKeyName) {
 
 export function determineSortBy(data, sortBy) {
     let work_sortData = []
+    console.log()
     switch (sortBy) {
         case 'priority':
             work_sortData = data.sort(byPriority)
