@@ -1,6 +1,7 @@
 <template >
     <div>
-        <GoallistNavBar/>
+        <GoallistHeader :displayStatus="this.glDisplayStatus"/>
+        <GoallistNavBar />
         <div>
             <div v-if="viewCreate">
                 <form @submit.prevent="handleCreateGoal">
@@ -102,6 +103,7 @@
 import router from "@/router";
 import GoallistNavBar from "../../composables/goallist/GoallistNavBar.vue"
 import GoallistCard from "../../composables/goallist/GoallistCard.vue"
+import GoallistHeader from "../../composables/goallist/GoallistHeader.vue"
 import { displayDateFormat, determineSortBy, getItemStorage, setItemStorage } from "../../assets/global.js"
 export default {
     name: "GoalListView",
@@ -138,7 +140,8 @@ export default {
     },
     components: {
         GoallistNavBar,
-        GoallistCard
+        GoallistCard,
+        GoallistHeader,
     },
   
     async mounted() {
